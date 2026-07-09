@@ -100,7 +100,7 @@ button{border:none;border-radius:11px;font-size:15px;font-weight:700;padding:13p
     <div id="list"><div class="empty">Aún no hay registros en esta jornada.</div></div>
     <div id="syncStatus" class="hint" style="margin-top:8px;font-weight:600"></div>
     <div class="btn-row">
-      <button class="btn-ghost" onclick="sendPending()">🔄 Sincronizar</button>
+      <button class="btn-ghost" onclick="sendPending()">💾 Guardar</button>
       <button class="btn-ghost" onclick="exportCSV()">⬇ CSV</button>
       <button class="btn-ghost" onclick="clearAll()">🗑 Vaciar</button>
     </div>
@@ -179,7 +179,7 @@ function addItem(){
     pComp:pComp,unidad:document.getElementById('unidad').value,obs:document.getElementById('obs').value,
     id:'H'+Date.now(),_sync:'pendiente'
   };
-  items.push(it);save();render();toast('✓ Agregado');sendPending();
+  items.push(it);save();render();sendPending();
   ['pComp','obs'].forEach(id=>document.getElementById(id).value='');
   espSel.value='';onEspecie();
   window.scrollTo({top:document.querySelector('.card:nth-child(5)').offsetTop-70,behavior:'smooth'});
@@ -202,13 +202,16 @@ async function sendPending(){
   if(!SYNC_URL||SYNC_URL.indexOf('PEGA_AQUI')===0){if(el)el.textContent='⚠ Sin conectar a Google Sheets (modo local)';return;}
   const pend=items.filter(x=>x._sync!=='enviado');
   if(!pend.length){updateSync();return;}
-  if(el)el.textContent='🔄 Enviando '+pend.length+'…';
+  if(el)el.textContent='🔄 Guardando y enviando…';
+  let sent=0,fail=0;
   for(const it of pend){
-    try{await fetch(SYNC_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({canal:'Horeca',record:buildRecord(it)})});it._sync='enviado';save();}catch(err){}
+    try{await fetch(SYNC_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({canal:'Horeca',record:buildRecord(it)})});it._sync='enviado';save();sent++;}catch(err){fail++;}
   }
   render();updateSync();
+  if(fail===0&&sent>0){toast('✓ Información guardada y enviada');}
+  else if(fail>0){toast('💾 Guardado. Se enviará al recuperar señal');}
 }
-function updateSync(){const el=document.getElementById('syncStatus');if(!el)return;const p=items.filter(x=>x._sync!=='enviado').length;el.textContent=p?('⏳ '+p+' pendiente(s) de enviar'):'✓ Todo enviado a Google Sheets';}
+function updateSync(){const el=document.getElementById('syncStatus');if(!el)return;const p=items.filter(x=>x._sync!=='enviado').length;el.textContent=p?('⏳ '+p+' pendiente(s) por enviar'):'✓ Información guardada y enviada';}
 function exportCSV(){
   if(!items.length)return toast('No hay datos');
   const cols=['fecha','responsable','zona','ciudad','marcaComp','tipoComp','especie','sub','presentacion','talla','codigos','marcas','pComp','unidad','obs'];
