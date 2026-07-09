@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Benchmark Competencia — Horeca | San Mateo</title>
+<style>
+:root{--navy:#1F3A5F;--teal:#2E8B8B;--teal-d:#236b6b;--bg:#f4f6f8;--card:#fff;--line:#e3e8ee;--muted:#6b7785;}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:#1a2230;font-size:16px;line-height:1.4}
+header{background:linear-gradient(135deg,var(--navy),var(--teal));color:#fff;padding:16px 18px;position:sticky;top:0;z-index:20;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+header h1{margin:0;font-size:18px;font-weight:700}header p{margin:3px 0 0;font-size:12.5px;opacity:.9}
+.wrap{max-width:640px;margin:0 auto;padding:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(20,30,50,.05)}
+.card h2{margin:0 0 12px;font-size:15px;color:var(--navy);display:flex;align-items:center;gap:8px}
+.badge{background:var(--teal);color:#fff;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+label{display:block;font-size:13px;font-weight:600;margin:12px 0 5px;color:#33404f}label .req{color:#c0392b}
+select,input,textarea{width:100%;padding:12px;border:1.5px solid var(--line);border-radius:10px;font-size:16px;background:#fff;font-family:inherit;color:#1a2230}
+select:focus,input:focus,textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,139,139,.12)}
+select:disabled{background:#f1f3f5;color:#9aa5b1}
+.row2{display:flex;gap:10px}.row2>div{flex:1}
+.hint{font-size:12px;color:var(--muted);margin-top:4px}
+.resolve{margin-top:14px;background:#eef6f6;border:1px dashed var(--teal);border-radius:12px;padding:12px}
+.resolve .t{font-size:12px;font-weight:700;color:var(--teal-d);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.chip{display:inline-block;background:#fff;border:1px solid var(--teal);color:var(--teal-d);border-radius:8px;padding:5px 9px;margin:3px 4px 3px 0;font-size:12.5px;font-weight:600}
+.chip small{color:var(--muted);font-weight:500}
+button{border:none;border-radius:11px;font-size:15px;font-weight:700;padding:13px;cursor:pointer;font-family:inherit}
+.btn-add{background:var(--teal);color:#fff;width:100%;margin-top:16px}.btn-add:active{background:var(--teal-d)}
+.btn-ghost{background:#fff;border:1.5px solid var(--navy);color:var(--navy)}
+.btn-row{display:flex;gap:10px;margin-top:10px}.btn-row button{flex:1}
+.item{background:#fbfcfd;border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:10px;padding:11px 12px;margin-bottom:9px;font-size:13.5px}
+.item .top{display:flex;justify-content:space-between;gap:8px}.item b{color:var(--navy)}
+.item .meta{color:var(--muted);font-size:12px;margin-top:3px}
+.item .px{margin-top:6px;font-size:13px}
+.item .px span{background:#eef6f6;border-radius:6px;padding:2px 7px;margin-right:6px;font-weight:600;color:var(--teal-d)}
+.del{background:none;color:#c0392b;font-size:12px;padding:2px 6px;font-weight:700}
+.count{background:var(--navy);color:#fff;border-radius:20px;padding:2px 10px;font-size:12px;font-weight:700}
+.empty{color:var(--muted);text-align:center;padding:18px;font-size:13.5px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:11px 20px;border-radius:30px;font-size:14px;font-weight:600;opacity:0;transition:.3s;z-index:50;box-shadow:0 4px 18px rgba(0,0,0,.25)}
+.toast.show{opacity:1}
+.foot{text-align:center;font-size:11px;color:var(--muted);padding:10px 0 30px}
+.demo{background:#fff8e6;border:1px solid #f0d68a;border-radius:10px;padding:10px 12px;font-size:12px;color:#7a5b12;margin-bottom:14px}
+</style></head>
+<body>
+<header><h1>🐟 Benchmark de Competencia — Horeca</h1>
+<p>Alimentos San Mateo · Zona Costa y Sierra · Precios de la competencia</p></header>
+<div class="wrap">
+  <div class="demo">Enfoque en la <b>competencia</b>: proveedor, especie y presentación. El código San Mateo comparable se resuelve solo y todo se envía a tu Google Sheet.</div>
+
+  <div class="card">
+    <h2><span class="badge">1</span> Contexto del levantamiento</h2>
+    <label>Fecha <span class="req">*</span></label>
+    <input type="date" id="fecha">
+    <label>Responsable / Vendedor <span class="req">*</span></label>
+    <select id="responsable"><option value="">Seleccione…</option><option>Elvis Parrales</option><option>Ricardo Falcones</option><option>Stephany Narvaez</option><option>Diego Gallegos</option><option>Patricio Ponce</option><option>Carlos Arias</option></select>
+    <div class="row2">
+      <div><label>Zona <span class="req">*</span></label>
+        <select id="zona" onchange="setCiudades()"><option value="">…</option><option>Costa</option><option>Sierra</option></select></div>
+      <div><label>Ciudad <span class="req">*</span></label>
+        <select id="ciudad"><option value="">…</option></select></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge">2</span> Competencia</h2>
+    <label>Proveedor / competencia <span class="req">*</span></label>
+    <input id="marcaComp" placeholder="Ej: Pescadería El Muelle, Pesca artesanal…">
+    <label>Tipo de competencia</label>
+    <select id="tipoComp"><option value="">…</option><option>Formal / Empresa</option><option>Informal / Pescador / Caraguay</option><option>Distribuidor / Mayorista</option></select>
+
+    <label>Especie <span class="req">*</span></label>
+    <select id="especie" onchange="onEspecie()"><option value="">Seleccione la especie…</option></select>
+
+    <div id="subWrap" style="display:none"><label>Sub-especie / Tipo</label>
+      <select id="sub"><option value="">…</option></select></div>
+
+    <label id="presLbl" style="display:none">Presentación <span class="req">*</span></label>
+    <select id="presentacion" style="display:none" onchange="onPres()"><option value="">…</option></select>
+
+    <label id="tallaLbl" style="display:none">Talla</label>
+    <select id="talla" style="display:none" onchange="resolve()"><option value="">…</option></select>
+
+    <div id="resolve" class="resolve" style="display:none">
+      <div class="t">🎯 Código San Mateo comparable</div>
+      <div id="codes"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge">3</span> Precio</h2>
+    <div class="row2">
+      <div><label>Precio competencia (USD) <span class="req">*</span></label><input id="pComp" inputmode="decimal" placeholder="0.00"></div>
+      <div><label>Unidad</label><select id="unidad"><option>Libra</option><option>Kilogramo</option><option>Gramos</option><option>Unidad</option></select></div>
+    </div>
+    <label>Observación</label>
+    <textarea id="obs" rows="2" placeholder="Notas relevantes…"></textarea>
+    <button class="btn-add" onclick="addItem()">＋ Agregar al levantamiento</button>
+  </div>
+
+  <div class="card">
+    <h2><span class="badge">4</span> Levantados <span id="cnt" class="count">0</span></h2>
+    <div id="list"><div class="empty">Aún no hay registros en esta jornada.</div></div>
+    <div id="syncStatus" class="hint" style="margin-top:8px;font-weight:600"></div>
+    <div class="btn-row">
+      <button class="btn-ghost" onclick="sendPending()">🔄 Sincronizar</button>
+      <button class="btn-ghost" onclick="exportCSV()">⬇ CSV</button>
+      <button class="btn-ghost" onclick="clearAll()">🗑 Vaciar</button>
+    </div>
+  </div>
+  <div class="foot">San Mateo · Los registros se consolidan en tu Google Sheet del canal Horeca.</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const DATA = {"Atún": {"sub": ["Albacora", "Bigeye (BE)", "Yellowfin (YF)"], "pres": {"Filete": {"N/A": [{"codigo": "PT-ATN-061", "nombre": "Albacora 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-ATN-160", "nombre": "Albacora Alimesa 200 Gr", "marca": "Alimesa", "unidad": "UN"}]}, "Lomo": {"N/A": [{"codigo": "PT-ATN-058", "nombre": "Albacora Lomito Alimesa 1Lb Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-ATN-155", "nombre": "Albacora Lomitos 300 Gr", "marca": "Alimesa", "unidad": "UN"}, {"codigo": "PT-FRE-001", "nombre": "San Mateo Atun Lomo Fresco", "marca": "San Mateo", "unidad": "KG"}, {"codigo": "PT-ATN-037", "nombre": "Albacora Lomo", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-ATN-062", "nombre": "Albacora Lomito 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-ATN-158", "nombre": "Atun Lomo Al Vacio 5-10 Lbs", "marca": "Alimesa", "unidad": "LB"}]}, "Porciones": {"N/A": [{"codigo": "PT-ATN-071", "nombre": "Albacora Steak 1Lb Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-ATN-061", "nombre": "Albacora 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-ATN-160", "nombre": "Albacora Alimesa 200 Gr", "marca": "Alimesa", "unidad": "UN"}]}, "Trozos": {"20-30": [{"codigo": "PT-ATN-110", "nombre": "Atún Trozos Yf 20-30 Fda.50 Mod Aa", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-ATN-122", "nombre": "Atún Trozos Yf 20-30 Fda.50 Trad Plus Aa", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-ATN-124", "nombre": "Atún Trozos Be 20-30 Fda.50 Trad Plus Aa", "marca": "Alimesa", "unidad": "LB"}], "30-40": [{"codigo": "PT-ATN-113", "nombre": "Atún Trozos Be 30-40 Fda.50 Mod Aa", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-ATN-123", "nombre": "Atún Trozos Yf 30-40 Fda.50 Trad Plus Aa", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-ATN-125", "nombre": "Atún Trozos Be 30-40 Fda.50 Trad Plus Aa", "marca": "Alimesa", "unidad": "LB"}], "40-60": [{"codigo": "PT-ATN-076", "nombre": "Atún Trozos Yf 40-60 Fda.50 Trad Aa", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-ATN-082", "nombre": "Atún Trozos Be 40-60 Fda.50 Trad Aa", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-ATN-152", "nombre": "Atún Trozos 40-60 Trad Aa 20Kg", "marca": "Alimesa", "unidad": "KG"}, {"codigo": "PT-ATN-154", "nombre": "Atún Trozos Yf 40-60 Trad Aa 5 Kg", "marca": "Alimesa", "unidad": "KG"}], "60-80": [{"codigo": "PT-ATN-077", "nombre": "Atún Trozos Yf 60-80 Fda.50 Trad Aa", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-ATN-083", "nombre": "Atún Trozos Be 60-80 Fda.50 Trad Aa", "marca": "Alimesa", "unidad": "LB"}], "N/A": [{"codigo": "PT-ATN-157", "nombre": "Albacora Trozos De 20 Lbs. Fda 50 Lbs", "marca": "Alimesa", "unidad": "LB"}]}}}, "Calamar": {"sub": [], "pres": {"Aros": {"N/A": [{"codigo": "PT-CLM-029", "nombre": "Aros De Calamar Alimesa 5 Lbs", "marca": "Alimesa", "unidad": "LB"}]}, "Cuerpo": {"N/A": [{"codigo": "PT-CLM-039", "nombre": "Calamar 1Lb Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-CLM-044", "nombre": "Calamar Porcion La Original 454 Gr", "marca": "La Original", "unidad": "LB"}, {"codigo": "PT-CLM-002", "nombre": "Calamar Pota Cuerpo G Fda.5 Lbs", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-CLM-019", "nombre": "Pt Calamar Potilla Cuerpo 5 Lbs Cong.", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-CLM-034", "nombre": "Calamar 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}]}, "Cabeza": {"N/A": [{"codigo": "PT-CLM-001", "nombre": "Calamar Pota Cabeza G Fda.5 Lbs", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-CLM-042", "nombre": "Ptcalamar Potilla Cabezacong.", "marca": "Alimesa", "unidad": "LB"}]}}}, "Camarón": {"sub": [], "pres": {"Pelado y Desvenado (P&D)": {"16-20": [{"codigo": "0068-013", "nombre": "Cam P&D Tail -Off 16-20 5.0 Lb", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-0385-013", "nombre": "Master No Brand 1X13 Kg 16-20", "marca": "Alimesa", "unidad": "UN"}], "21-25": [{"codigo": "0068-014", "nombre": "Cam P&D Tail -Off 21-25 5 Lbs", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-0385-014", "nombre": "Master No Brand 1X13 Kg 21-25", "marca": "Alimesa", "unidad": "UN"}, {"codigo": "PT-0498-014", "nombre": "Master No Brand 1X13 Kg 21-25", "marca": "Alimesa", "unidad": "UN"}], "26-30": [{"codigo": "0068-015", "nombre": "Cam P&D Tail -Off 26-30 5 Lbs", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "0168-015", "nombre": "Cam P&D Tail-Off Hq 26-30 5 Lb", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-0385-015", "nombre": "Master No Brand 1X13 Kg 26-30", "marca": "Alimesa", "unidad": "UN"}], "31-35": [{"codigo": "0068-016", "nombre": "Cam P&D Tail -Off 31-35 5 Lbs", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "0168-016", "nombre": "Cam P&D Tail-Off Hq 31-35 5 Lb", "marca": "Alimesa", "unidad": "LB"}], "31-40": [{"codigo": "0154-016", "nombre": "Cam P&D C.Alimesa 4 Lb 31/40", "marca": "Alimesa", "unidad": "LB"}], "36-40": [{"codigo": "0068-017", "nombre": "Cam P&D Tail -Off 36-40 5 Lbs", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "0168-017", "nombre": "Cam P&D Tail-Off Hq 36-40 5 Lb", "marca": "Alimesa", "unidad": "LB"}], "41-50": [{"codigo": "0068-018", "nombre": "Cam P&D Tail -Off 41-50 5 Lbs", "marca": "Alimesa", "unidad": "LB"}], "51-60": [{"codigo": "0068-019", "nombre": "Cam P&D Tail -Off 51-60 5 Lbs", "marca": "Alimesa", "unidad": "LB"}], "Extra Grande / Jumbo": [{"codigo": "0074-031", "nombre": "Camaron Jumbo P&D 1Lb Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "0074-030", "nombre": "Camarón Jumbo P&D 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}], "Grande": [{"codigo": "0076-036", "nombre": "Camaron P&D Grande 1Lb Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "0076-034", "nombre": "Camaron P&D Grande 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}], "Mediano": [{"codigo": "0076-029", "nombre": "Cam P&D Tail Off Mediano 1Lb Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "0076-033", "nombre": "Cam P&D Tail Off Mediano 1.0Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}], "Mix Tallas": [{"codigo": "PT-MRS-014", "nombre": "Mix De Camaron P&D 1Lb Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-MRS-016", "nombre": "Camarón Mix Alimesa 22/ 200G", "marca": "Alimesa", "unidad": "UN"}, {"codigo": "0068-036", "nombre": "Camaron Mix Pyd Fda 5 Lbs", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "0329-045", "nombre": "Camarón P&D Mix L 5 Lbs", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "0329-054", "nombre": "Camarón P&D Broken 5 Lbs", "marca": "Alimesa", "unidad": "LB"}], "N/A": [{"codigo": "0076-037", "nombre": "Camaron Pyd La Original 454 Gr", "marca": "La Original", "unidad": "LB"}, {"codigo": "0076-038", "nombre": "Camaron Pyd El Artesanal 454 Gr", "marca": "El Artesanal", "unidad": "LB"}], "Pequeño": [{"codigo": "0076-035", "nombre": "Camaron P&D Pequeño 1Lb Aass", "marca": "Alimesa", "unidad": "LB"}], "U-10": [{"codigo": "PT-0062-010", "nombre": "Master No Brand 6X1 Kg U-10", "marca": "Alimesa", "unidad": "UN"}], "U-12": [{"codigo": "PT-0062-060", "nombre": "Master No Brand 6X1 Kg U-12 E", "marca": "Alimesa", "unidad": "UN"}], "U-15": [{"codigo": "PT-0305-061", "nombre": "Master No Brand 20X1 Lb U-15 E", "marca": "Alimesa", "unidad": "UN"}]}, "Cáscara sin cabeza": {"16-20": [{"codigo": "0269-013", "nombre": "Camhlso Alimesapro.4.0Lb 16/20", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "0334-013", "nombre": "Cam Hlso Alimesa 4 Lb 16/20", "marca": "Alimesa", "unidad": "LB"}], "21-25": [{"codigo": "0269-014", "nombre": "Camhlso Alimesapro.4.0Lb 21/25", "marca": "Alimesa", "unidad": "LB"}], "26-30": [{"codigo": "0269-015", "nombre": "Camhlso Alimesapro.4.0Lb 26/30", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "0334-015", "nombre": "Cam Hlso Alimesa 4 Lb 26/30", "marca": "Alimesa", "unidad": "LB"}], "31-35": [{"codigo": "0269-016", "nombre": "Camhlso Alimesapro.4.0Lb 31/35", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "0334-016", "nombre": "Cam Hlso Alimesa 4 Lb 31/35", "marca": "Alimesa", "unidad": "LB"}], "36-40": [{"codigo": "0269-017", "nombre": "Camhlso Alimesapro.4.0Lb 36/40", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "0334-017", "nombre": "Cam Hlso Alimesa 4 Lb 36/40", "marca": "Alimesa", "unidad": "LB"}], "41-50": [{"codigo": "0269-018", "nombre": "Camhlso Alimesapro.4.0Lb 41/50", "marca": "Alimesa", "unidad": "LB"}], "51-60": [{"codigo": "0269-019", "nombre": "Camhlso Alimesapro.4.0Lb 51/60", "marca": "Alimesa", "unidad": "LB"}], "61-70": [{"codigo": "0269-020", "nombre": "Camhlso Alimesapro.4.0Lb 61/70", "marca": "Alimesa", "unidad": "LB"}], "Mediano": [{"codigo": "0008-027", "nombre": "Cam Hlso Funda 5.0Lb Medium Ml", "marca": "Alimesa", "unidad": "LB"}], "Pequeño": [{"codigo": "0007-024", "nombre": "Pt Cam Cola Juve. Mlb 5 Lb", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "0008-026", "nombre": "Cam Hlso Funda 5.0Lb Small Ml", "marca": "Alimesa", "unidad": "LB"}], "U-12": [{"codigo": "0269-011", "nombre": "Cam Hlso Alimesa.P 4 Lb U-12", "marca": "Alimesa", "unidad": "LB"}], "U-15": [{"codigo": "0269-012", "nombre": "Cam Hlso Alimesa.P 4 Lb U-15", "marca": "Alimesa", "unidad": "LB"}]}}}, "Corvina": {"sub": ["Plateada", "Roca"], "pres": {"Filete": {"1-3": [{"codigo": "PT-CVN-006", "nombre": "Corvina De Roca Filete S/P 1-3", "marca": "Alimesa", "unidad": "LB"}], "3-5": [{"codigo": "PT-CVN-023", "nombre": "Corvina De Roca Filete S/P 3-5", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-CVN-046", "nombre": "Corvina Plateada Filete S/P 3-5", "marca": "Alimesa", "unidad": "LB"}], "N/A": [{"codigo": "PT-FRE-002", "nombre": "San Mateo Corvina Filete Fresco", "marca": "San Mateo", "unidad": "KG"}, {"codigo": "PT-CON-004", "nombre": "Corvina Fresca Congelada Filete", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-CVN-035", "nombre": "Corvina Fresca Filete", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-CVN-029", "nombre": "Corvina 1Lb Alimesa Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-CVN-047", "nombre": "Corvina San Mateo 454 Gr", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-CVN-003", "nombre": "Pt Corvina 200-220 Gr Cc", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-CVN-039", "nombre": "Corvina Pieces Fda 5Lbs", "marca": "Alimesa", "unidad": "LB"}]}, "Porciones": {"N/A": [{"codigo": "PT-CVN-030", "nombre": "Corvina Premium 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-CVN-029", "nombre": "Corvina 1Lb Alimesa Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-CVN-047", "nombre": "Corvina San Mateo 454 Gr", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-CVN-003", "nombre": "Pt Corvina 200-220 Gr Cc", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-CVN-039", "nombre": "Corvina Pieces Fda 5Lbs", "marca": "Alimesa", "unidad": "LB"}]}}}, "Corvinilla": {"sub": [], "pres": {"Filete": {"200-300": [{"codigo": "PT-CVL-001", "nombre": "Corvinilla Flt.Sp 200-300 Cong.", "marca": "Alimesa", "unidad": "LB"}], "N/A": [{"codigo": "PT-CVL-014", "nombre": "Corvinilla Filete 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-CVL-024", "nombre": "Corvinilla Filetes Sp", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-CVL-012", "nombre": "Corvinilla Alimesa 1Lb Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-CVL-017", "nombre": "Pt Corvinilla Alimesa 200Gr", "marca": "Alimesa", "unidad": "UN"}, {"codigo": "PT-CVL-019", "nombre": "Corvinilla 300 Gr", "marca": "Alimesa", "unidad": "UN"}, {"codigo": "PT-CVL-020", "nombre": "Corvinilla San Mateo 454 Gr", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-CVL-021", "nombre": "Corvinilla Alimesa 454 Gr", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-CVL-023", "nombre": "Corvinilla El Artesanal 454 Gr", "marca": "El Artesanal", "unidad": "LB"}]}, "Porciones": {"N/A": [{"codigo": "PT-CVL-022", "nombre": "Corvinilla Porcion La Original 454 Gr", "marca": "La Original", "unidad": "LB"}, {"codigo": "PT-CVL-012", "nombre": "Corvinilla Alimesa 1Lb Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-CVL-017", "nombre": "Pt Corvinilla Alimesa 200Gr", "marca": "Alimesa", "unidad": "UN"}, {"codigo": "PT-CVL-019", "nombre": "Corvinilla 300 Gr", "marca": "Alimesa", "unidad": "UN"}, {"codigo": "PT-CVL-020", "nombre": "Corvinilla San Mateo 454 Gr", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-CVL-021", "nombre": "Corvinilla Alimesa 454 Gr", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-CVL-023", "nombre": "Corvinilla El Artesanal 454 Gr", "marca": "El Artesanal", "unidad": "LB"}]}}}, "Dorado": {"sub": [], "pres": {"Filete": {"N/A": [{"codigo": "PT-FRE-003", "nombre": "San Mateo Dorado Filete Fresco", "marca": "San Mateo", "unidad": "KG"}, {"codigo": "PT-CON-001", "nombre": "Dorado Fresco Congelado Filete", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-DRD-216", "nombre": "Dorado Sp Boneless 5 Lbs", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-DRD-214", "nombre": "Dorado San Mateo 454 Gr", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "MP-DRD-017", "nombre": "Dorado Fresco", "marca": "Alimesa", "unidad": "LB"}]}, "Porciones": {"2-3": [{"codigo": "PT-DRD-123", "nombre": "Pt Dorado Porc. 2-3 Sp", "marca": "Alimesa", "unidad": "KG"}], "6 Oz": [{"codigo": "PT-DRD-062", "nombre": "Pt Dorado Porc. 6Oz Cong.", "marca": "Alimesa", "unidad": "LB"}], "8 Oz": [{"codigo": "PT-DRD-064", "nombre": "Dorado Porc. 8Oz Cong.", "marca": "Alimesa", "unidad": "LB"}], "N/A": [{"codigo": "PT-DRD-183", "nombre": "Dorado Premium Alimesa1Lb Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-DRD-184", "nombre": "Dorado Tipico Alimesa 1Lb Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-DRD-209", "nombre": "Dorado Tipico 300 Gr", "marca": "Alimesa", "unidad": "UN"}, {"codigo": "PT-DRD-188", "nombre": "Dorado Premium 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-DRD-214", "nombre": "Dorado San Mateo 454 Gr", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "MP-DRD-017", "nombre": "Dorado Fresco", "marca": "Alimesa", "unidad": "LB"}]}, "Trozos": {"1-2": [{"codigo": "PT-DRD-215", "nombre": "Dorado Colas 1-2 Sp Fda. 5 Lbs Cong", "marca": "Alimesa", "unidad": "LB"}], "N/A": [{"codigo": "PT-DRD-196", "nombre": "Dorado Trocitos 1Lb Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-DRD-210", "nombre": "Dorado Trocitos 300 Gr", "marca": "Alimesa", "unidad": "UN"}, {"codigo": "PT-DRD-211", "nombre": "Dorado Trocitos Alimesa 5 Lbs", "marca": "Alimesa", "unidad": "UN"}, {"codigo": "PT-DRD-187", "nombre": "Dorado Trocitos 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}]}, "Ceviche": {"N/A": [{"codigo": "PT-DRD-213", "nombre": "Ceviche De Pescado San Mateo 454 Gr", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-DRD-189", "nombre": "Ceviche De Pescado San Mateo 1Lb", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-DRD-203", "nombre": "Pt Dorado Ceviche 5 Lbs Aa", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-DRD-208", "nombre": "Dorado Ceviche Salmuera Fda. 5Lbs", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-DRD-217", "nombre": "Ceviche De Pescado Alimesa 200 Gr", "marca": "Alimesa", "unidad": "UN"}]}, "Fletch/Tiras": {"N/A": [{"codigo": "PT-DRD-043", "nombre": "Dorado Fletch <1 Lb Fda. 10 Lbs", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-DRD-046", "nombre": "Dorado Fletch L Cong. A", "marca": "Alimesa", "unidad": "LB"}]}}}, "Espada": {"sub": [], "pres": {"Filete": {"N/A": [{"codigo": "MP-ESP-005", "nombre": "Espada Fresco", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-ESP-049", "nombre": "Espada 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}]}, "Lomo": {"3-5": [{"codigo": "PT-ESP-013", "nombre": "Espada Lomo 3-5", "marca": "Alimesa", "unidad": "LB"}], "N/A": [{"codigo": "PT-FRE-005", "nombre": "San Mateo Pez Espada Lomo Fresco", "marca": "San Mateo", "unidad": "KG"}, {"codigo": "PT-CON-002", "nombre": "Espada Fresco Congelado Lomo", "marca": "Alimesa", "unidad": "LB"}]}, "Porciones": {"N/A": [{"codigo": "PT-ESP-051", "nombre": "Espada Porciones Sp", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-ESP-045", "nombre": "Espada Steak 1Lb Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-ESP-024", "nombre": "Espada Steak 200-220 Gr", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "MP-ESP-005", "nombre": "Espada Fresco", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-ESP-049", "nombre": "Espada 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}]}, "Ventresca": {"N/A": [{"codigo": "MP-ESP-006", "nombre": "Ventrezca De Pez Espada", "marca": "Alimesa", "unidad": "LB"}]}}}, "Lenguado": {"sub": [], "pres": {"Filete": {"N/A": [{"codigo": "PT-CON-006", "nombre": "Lenguado Fresco Congelado Filete", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-LDO-001", "nombre": "Pt Lenguado Filete Fresco", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "MP-LDO-001", "nombre": "Lenguado Fresco", "marca": "Alimesa", "unidad": "LB"}]}, "Porciones": {"N/A": [{"codigo": "MP-LDO-001", "nombre": "Lenguado Fresco", "marca": "Alimesa", "unidad": "LB"}]}}}, "Mariscos": {"sub": [], "pres": {"Mix de mariscos": {"Mix Tallas": [{"codigo": "PT-MRS-009", "nombre": "Mixde Camarón Y Picudo 1Lb Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-MRS-010", "nombre": "Mix De Mariscos Alimesa 1Lb Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-MRS-017", "nombre": "Mix De Mariscos La Original 454 Gr", "marca": "La Original", "unidad": "LB"}, {"codigo": "PT-MRS-018", "nombre": "Mix De Mariscos El Artesanal 454 Gr", "marca": "El Artesanal", "unidad": "LB"}, {"codigo": "PT-MRS-011", "nombre": "Mix De Mariscos 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-MRS-013", "nombre": "Mix De Mariscos 5 Lb", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-MRS-019", "nombre": "Mix De Mariscos 5 Lb Hq", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-MRS-021", "nombre": "Mix De Mariscos Sp", "marca": "Alimesa", "unidad": "LB"}]}}}, "Merluza": {"sub": [], "pres": {"Filete": {"N/A": [{"codigo": "PT-MLZ-007", "nombre": "Pt Merluza Filete Sp 5 Lbs Cong.", "marca": "Alimesa", "unidad": "LB"}]}}}, "Ostras": {"sub": [], "pres": {"Entero": {"N/A": [{"codigo": "MP-OST-001", "nombre": "Ostras", "marca": "Alimesa", "unidad": "UN"}]}}}, "Perela": {"sub": [], "pres": {"Entero": {"N/A": [{"codigo": "MP-PER-001", "nombre": "Perela Entero", "marca": "Alimesa", "unidad": "LB"}]}}}, "Picudo": {"sub": [], "pres": {"Filete": {"N/A": [{"codigo": "PT-PCD-046", "nombre": "Picudo San Mateo 454 Gr", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-PCD-042", "nombre": "Picudo 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-PCD-048", "nombre": "Picudo Pieces San Mateo 5 Lbs", "marca": "San Mateo", "unidad": "LB"}]}, "Lomo": {"2-3": [{"codigo": "PT-PCD-047", "nombre": "Picudo Lomo 2-3 Sp Cong. A", "marca": "Alimesa", "unidad": "LB"}], "5-7": [{"codigo": "PT-PCD-017", "nombre": "Picudo Lomo 5-7 Sp Cong. A", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-PCD-024", "nombre": "Pt Picudo Lomo 5-7 Sp Cong. B", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-PCD-028", "nombre": "Pt Picudo Lomo 5-7 Sp Cong. C", "marca": "Alimesa", "unidad": "LB"}], "N/A": [{"codigo": "PT-FRE-006", "nombre": "San Mateo Picudo Lomo Fresco", "marca": "San Mateo", "unidad": "KG"}, {"codigo": "PT-CON-010", "nombre": "Picudo Fresco Congelado Lomo", "marca": "Alimesa", "unidad": "LB"}]}, "Porciones": {"N/A": [{"codigo": "PT-PCD-050", "nombre": "Picudo Porciones Sp", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-PCD-041", "nombre": "Picudo Steak Alimesa 1Lb Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-PCD-032", "nombre": "Picudo Steak 200-220Gr Cc", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-PCD-046", "nombre": "Picudo San Mateo 454 Gr", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-PCD-042", "nombre": "Picudo 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-PCD-048", "nombre": "Picudo Pieces San Mateo 5 Lbs", "marca": "San Mateo", "unidad": "LB"}]}, "Ceviche": {"N/A": [{"codigo": "PT-PCD-039", "nombre": "Pt Picudo Ceviche 5 Lbs", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-PCD-044", "nombre": "Picudo Ceviche 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-PCD-049", "nombre": "Picudo Ceviche Sp", "marca": "Alimesa", "unidad": "LB"}]}}}, "Pulpo": {"sub": [], "pres": {"Entero": {"N/A": [{"codigo": "PT-FRE-007", "nombre": "San Mateo Pulpo Fresco", "marca": "San Mateo", "unidad": "KG"}, {"codigo": "PT-CON-008", "nombre": "Pulpo Entero Fresco Congelado", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-PLP-006", "nombre": "Pulpo Entero", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-PLP-007", "nombre": "Pulpo Entero Congelado", "marca": "Alimesa", "unidad": "LB"}]}, "Tentáculos": {"N/A": [{"codigo": "PT-PLP-008", "nombre": "Tentaculo Pulpo San Mateo 454G", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-PLP-009", "nombre": "Patas De Pulpo Cocido", "marca": "Alimesa", "unidad": "UN"}]}}}, "Robalo": {"sub": [], "pres": {"Filete": {"N/A": [{"codigo": "PT-FRE-008", "nombre": "San Mateo Robalo Filete Fresco", "marca": "San Mateo", "unidad": "KG"}, {"codigo": "PT-CON-003", "nombre": "Robalo Fresco Congelado Filete", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-ROB-001", "nombre": "Robalo Filete", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-ROB-005", "nombre": "Robalo Filete Cp", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-ROB-007", "nombre": "Robalo San Mateo 454 Gr", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-ROB-002", "nombre": "Robalo 1Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}]}, "Porciones": {"N/A": [{"codigo": "PT-ROB-007", "nombre": "Robalo San Mateo 454 Gr", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-ROB-002", "nombre": "Robalo 1Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}]}}}, "Salmón": {"sub": [], "pres": {"Filete": {"3-4": [{"codigo": "PT-PSC-005", "nombre": "Pt Salmon Filete 3-4 Cong.", "marca": "Alimesa", "unidad": "LB"}], "4-5": [{"codigo": "PT-PSC-024", "nombre": "Pt Salmon Filete 4-5 Cong.", "marca": "Alimesa", "unidad": "LB"}], "N/A": [{"codigo": "PT-FRE-009", "nombre": "San Mateo Salmon Filete Fresco", "marca": "San Mateo", "unidad": "KG"}, {"codigo": "PT-PSC-022", "nombre": "Salmon Filete Cp Cong. Kg", "marca": "Alimesa Profesional", "unidad": "KG"}, {"codigo": "PT-PSC-034", "nombre": "Salmon San Mateo 454 Gr", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-PSC-016", "nombre": "Salmon 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}]}, "Porciones": {"N/A": [{"codigo": "PT-PSC-010", "nombre": "Salmon Steak. 200-220 Gr Cc", "marca": "Alimesa Profesional", "unidad": "LB"}, {"codigo": "PT-PSC-013", "nombre": "Salmon Steak Alimesa 227G Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-PSC-019", "nombre": "Salmon Steak 1 Lb Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-PSC-007", "nombre": "Alimesa Salmon Steak 1 Lb", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-PSC-035", "nombre": "Salmon Steak Cc Aa", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-PSC-036", "nombre": "Salmon Steak Cc A", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-PSC-034", "nombre": "Salmon San Mateo 454 Gr", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-PSC-016", "nombre": "Salmon 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}]}}}, "Tilapia": {"sub": [], "pres": {"Filete": {"N/A": [{"codigo": "PT-TLP-005", "nombre": "Pt Tilapia Filete 5Lbs", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-TLP-006", "nombre": "Tilapia 1Lb Alimesa Aass", "marca": "Alimesa", "unidad": "LB"}]}, "Porciones": {"N/A": [{"codigo": "PT-TLP-006", "nombre": "Tilapia 1Lb Alimesa Aass", "marca": "Alimesa", "unidad": "LB"}]}}}, "Tuna": {"sub": ["Atún Rojo", "Yellowfin (YF)"], "pres": {"Filete": {"N/A": [{"codigo": "MP-TNA-009", "nombre": "Tuna Fresco", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-TNA-061", "nombre": "Tuna 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-TNA-072", "nombre": "Atun Rojo Alimesa 200 Gr", "marca": "Alimesa", "unidad": "UN"}]}, "Lomo": {"5-8": [{"codigo": "PT-TNA-066", "nombre": "Tuna Yf Co Lomo Center Cut 5-8", "marca": "Alimesa", "unidad": "LB"}], "N/A": [{"codigo": "PT-CON-005", "nombre": "Tuna Fresco Congelado Lomo", "marca": "Alimesa", "unidad": "LB"}]}, "Porciones": {"N/A": [{"codigo": "PT-TNA-064", "nombre": "Tuna Steak 1Lb Aass", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-TNA-006", "nombre": "Tuna Steaks 200-220 Gr", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "MP-TNA-009", "nombre": "Tuna Fresco", "marca": "Alimesa", "unidad": "LB"}, {"codigo": "PT-TNA-061", "nombre": "Tuna 1 Lb San Mateo", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-TNA-072", "nombre": "Atun Rojo Alimesa 200 Gr", "marca": "Alimesa", "unidad": "UN"}]}, "Ceviche": {"12 Oz": [{"codigo": "PT-TNA-068", "nombre": "Tuna Yf Co Saku 8-12 Oz", "marca": "Alimesa", "unidad": "LB"}], "16 Oz": [{"codigo": "PT-TNA-069", "nombre": "Tuna Yf Co Saku 12-16 Oz", "marca": "Alimesa", "unidad": "LB"}], "N/A": [{"codigo": "PT-TNA-070", "nombre": "Tartar De Atun Rojo 1Lb Sm", "marca": "San Mateo", "unidad": "LB"}, {"codigo": "PT-TNA-067", "nombre": "Tuna Yf Co Cubo", "marca": "Alimesa", "unidad": "LB"}]}}}, "Wahoo": {"sub": [], "pres": {"Filete": {"5-7": [{"codigo": "PT-WHO-007", "nombre": "Pt Wahoo Filete Cp 5-7 Cocong.", "marca": "Alimesa", "unidad": "LB"}], "7 UP": [{"codigo": "PT-WHO-009", "nombre": "Pt Wahoo Filete Cp 7Up Cocong.", "marca": "Alimesa", "unidad": "LB"}]}}}};
+const CIUDADES = {"Costa": ["Guayaquil", "Manta", "Santo Domingo", "Machala", "Portoviejo", "Otra (Costa)"], "Sierra": ["Quito", "Cuenca", "Ambato", "Riobamba", "Loja", "Otra (Sierra)"]};
+const SYNC_URL = "https://script.google.com/macros/s/AKfycbz-wQR0OA-ktIKNWP0cAyv5BgmIolNBcNSynVx11meN-fZmM_pR62ieDXbsK0zgpfI/exec";
+let items = JSON.parse(localStorage.getItem('sm_horeca')||'[]');
+
+document.getElementById('fecha').valueAsDate=new Date();
+const espSel=document.getElementById('especie');
+Object.keys(DATA).sort().forEach(e=>espSel.add(new Option(e,e)));
+
+function setCiudades(){let z=document.getElementById('zona').value;let c=document.getElementById('ciudad');c.innerHTML='<option value="">…</option>';(CIUDADES[z]||[]).forEach(x=>c.add(new Option(x,x)))}
+
+function onEspecie(){
+  const e=espSel.value;
+  const subW=document.getElementById('subWrap'),subS=document.getElementById('sub');
+  const presL=document.getElementById('presLbl'),presS=document.getElementById('presentacion');
+  const tallaL=document.getElementById('tallaLbl'),tallaS=document.getElementById('talla');
+  document.getElementById('resolve').style.display='none';[presL,presS,tallaL,tallaS].forEach(x=>x.style.display='none');subW.style.display='none';
+  if(!e)return;
+  const subs=DATA[e].sub;
+  if(subs&&subs.length){subS.innerHTML='<option value="">Todas / No especifica</option>';subs.forEach(s=>subS.add(new Option(s,s)));subW.style.display='block'}
+  presS.innerHTML='<option value="">Seleccione…</option>';
+  Object.keys(DATA[e].pres).forEach(p=>presS.add(new Option(p,p)));
+  presL.style.display='block';presS.style.display='block';
+}
+function onPres(){
+  const e=espSel.value,p=document.getElementById('presentacion').value;
+  const tallaL=document.getElementById('tallaLbl'),tallaS=document.getElementById('talla');
+  document.getElementById('resolve').style.display='none';tallaL.style.display='none';tallaS.style.display='none';
+  if(!p)return;
+  const tallas=Object.keys(DATA[e].pres[p]),real=tallas.filter(t=>t!=='N/A');
+  if(real.length){
+    tallaS.innerHTML='<option value="">Seleccione talla…</option>';
+    real.sort((a,b)=>parseInt(a)-parseInt(b)||a.localeCompare(b)).forEach(t=>tallaS.add(new Option(t,t)));
+    if(tallas.includes('N/A'))tallaS.add(new Option('No especifica','N/A'));
+    tallaL.style.display='block';tallaS.style.display='block';
+  } else { document.getElementById('talla').value='N/A'; resolve(); }
+}
+function currentCodes(){
+  const e=espSel.value,p=document.getElementById('presentacion').value,t=document.getElementById('talla').value;
+  if(!e||!p)return[];
+  const byT=DATA[e].pres[p];
+  if(t&&byT[t])return byT[t];
+  let all=[];Object.values(byT).forEach(a=>all=all.concat(a));return all;
+}
+function resolve(){
+  const box=document.getElementById('resolve'),c=document.getElementById('codes');
+  const codes=currentCodes();
+  if(!codes.length){box.style.display='none';return}
+  box.style.display='block';
+  c.innerHTML=codes.map(x=>`<span class="chip">${x.codigo} <small>· ${x.marca||''} ${x.unidad||''}</small></span>`).join('')
+    + `<div class="hint">Se compara contra ${codes.length} SKU comparable(s). Se resuelve solo.</div>`;
+}
+function addItem(){
+  const e=espSel.value,p=document.getElementById('presentacion').value;
+  const pComp=document.getElementById('pComp').value,prov=document.getElementById('marcaComp').value;
+  if(!prov){return toast('Falta el proveedor de la competencia')}
+  if(!e){return toast('Elige la especie')}
+  if(!p){return toast('Elige la presentación')}
+  if(!pComp){return toast('Falta el precio de la competencia')}
+  const codes=currentCodes();
+  const it={
+    fecha:document.getElementById('fecha').value,responsable:document.getElementById('responsable').value,
+    zona:document.getElementById('zona').value,ciudad:document.getElementById('ciudad').value,
+    marcaComp:prov,tipoComp:document.getElementById('tipoComp').value,
+    especie:e,sub:document.getElementById('sub').value,presentacion:p,talla:document.getElementById('talla').value||'N/A',
+    codigos:codes.map(x=>x.codigo).join(' | '),marcas:[...new Set(codes.map(x=>x.marca))].join(' | '),
+    pComp:pComp,unidad:document.getElementById('unidad').value,obs:document.getElementById('obs').value,
+    id:'H'+Date.now(),_sync:'pendiente'
+  };
+  items.push(it);save();render();toast('✓ Agregado');sendPending();
+  ['pComp','obs'].forEach(id=>document.getElementById(id).value='');
+  espSel.value='';onEspecie();
+  window.scrollTo({top:document.querySelector('.card:nth-child(5)').offsetTop-70,behavior:'smooth'});
+}
+function render(){
+  const l=document.getElementById('list');document.getElementById('cnt').textContent=items.length;
+  if(!items.length){l.innerHTML='<div class="empty">Aún no hay registros en esta jornada.</div>';return}
+  l.innerHTML=items.map((it,i)=>`<div class="item"><div class="top"><b>${it.especie} · ${it.presentacion}${it.talla!=='N/A'?' · '+it.talla:''}</b>
+    <button class="del" onclick="rm(${i})">✕</button></div>
+    <div class="meta">Competencia: ${it.marcaComp||'—'}${it.tipoComp?' ('+it.tipoComp+')':''}</div>
+    <div class="meta">↔ ${it.codigos||'—'}</div>
+    <div class="px"><span>$${it.pComp}/${it.unidad}</span>${it._sync==='enviado'?'<span style="background:#e6f5ea;color:#2e8b57">✓ enviado</span>':'<span style="background:#fff3d6;color:#9a6412">⏳ pendiente</span>'}</div></div>`).join('');
+}
+function rm(i){items.splice(i,1);save();render()}
+function clearAll(){if(confirm('¿Vaciar todos los registros de este dispositivo?')){items=[];save();render()}}
+function save(){localStorage.setItem('sm_horeca',JSON.stringify(items))}
+function buildRecord(it){return {ID:it.id||'',Fecha:it.fecha||'',Responsable:it.responsable||'',Zona:it.zona||'',Ciudad:it.ciudad||'',Cliente:'',TipoCliente:'',Especie:it.especie||'',SubEspecie:it.sub||'',Presentacion:it.presentacion||'',Talla:it.talla||'',CodigosSanMateo:it.codigos||'',MarcasComparables:it.marcas||'',ProveedorCompetencia:it.marcaComp||'',PrecioCompetencia:it.pComp||'',Unidad:it.unidad||'',TipoCompetencia:it.tipoComp||'',Observacion:it.obs||''};}
+async function sendPending(){
+  const el=document.getElementById('syncStatus');
+  if(!SYNC_URL||SYNC_URL.indexOf('PEGA_AQUI')===0){if(el)el.textContent='⚠ Sin conectar a Google Sheets (modo local)';return;}
+  const pend=items.filter(x=>x._sync!=='enviado');
+  if(!pend.length){updateSync();return;}
+  if(el)el.textContent='🔄 Enviando '+pend.length+'…';
+  for(const it of pend){
+    try{await fetch(SYNC_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({canal:'Horeca',record:buildRecord(it)})});it._sync='enviado';save();}catch(err){}
+  }
+  render();updateSync();
+}
+function updateSync(){const el=document.getElementById('syncStatus');if(!el)return;const p=items.filter(x=>x._sync!=='enviado').length;el.textContent=p?('⏳ '+p+' pendiente(s) de enviar'):'✓ Todo enviado a Google Sheets';}
+function exportCSV(){
+  if(!items.length)return toast('No hay datos');
+  const cols=['fecha','responsable','zona','ciudad','marcaComp','tipoComp','especie','sub','presentacion','talla','codigos','marcas','pComp','unidad','obs'];
+  const head=['Fecha','Responsable','Zona','Ciudad','Proveedor','TipoCompetencia','Especie','SubEspecie','Presentacion','Talla','CodigosSanMateo','MarcasComparables','PrecioCompetencia','Unidad','Observacion'];
+  let csv=head.join(';')+'\n';
+  items.forEach(it=>{csv+=cols.map(c=>`"${(it[c]||'').toString().replace(/"/g,'""')}"`).join(';')+'\n'});
+  const b=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='Benchmark_Horeca_'+new Date().toISOString().slice(0,10)+'.csv';a.click();toast('CSV exportado');
+}
+let tt;function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1800)}
+render();sendPending();
+</script></body></html>
