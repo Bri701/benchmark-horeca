@@ -87,7 +87,7 @@ button{border:none;border-radius:11px;font-size:15px;font-weight:700;padding:13p
   <div class="card">
     <h2><span class="badge">3</span> Precio</h2>
     <div class="row2">
-      <div><label>Precio competencia (USD) <span class="req">*</span></label><input id="pComp" inputmode="decimal" placeholder="0.00"></div>
+      <div><label>Precio competencia (USD) <span class="req">*</span></label><input id="pComp" inputmode="decimal" placeholder="Ej: 2.90" oninput="this.value=this.value.replace(/,/g,'.')"></div>
       <div><label>Unidad</label><select id="unidad"><option>Libra</option><option>Kilogramo</option><option>Gramos</option><option>Unidad</option></select></div>
     </div>
     <label>Observación</label>
@@ -114,6 +114,7 @@ const DATA = {"Atún": {"sub": ["Albacora", "Bigeye (BE)", "Yellowfin (YF)"], "p
 const CIUDADES = {"Costa": ["Guayaquil", "Manta", "Santo Domingo", "Machala", "Portoviejo", "Otra (Costa)"], "Sierra": ["Quito", "Cuenca", "Ambato", "Riobamba", "Loja", "Otra (Sierra)"]};
 const SYNC_URL = "https://script.google.com/macros/s/AKfycbz-wQR0OA-ktIKNWP0cAyv5BgmIolNBcNSynVx11meN-fZmM_pR62ieDXbsK0zgpfI/exec";
 let items = JSON.parse(localStorage.getItem('sm_horeca')||'[]');
+let sending=false; // candado: evita envios simultaneos y duplicados
 
 document.getElementById('fecha').valueAsDate=new Date();
 const espSel=document.getElementById('especie');
@@ -164,11 +165,14 @@ function resolve(){
 }
 function addItem(){
   const e=espSel.value,p=document.getElementById('presentacion').value;
-  const pComp=document.getElementById('pComp').value,prov=document.getElementById('marcaComp').value;
+  const pRaw=document.getElementById('pComp').value.trim().replace(/,/g,'.');
+  const prov=document.getElementById('marcaComp').value.trim();
   if(!prov){return toast('Falta el proveedor de la competencia')}
   if(!e){return toast('Elige la especie')}
   if(!p){return toast('Elige la presentación')}
-  if(!pComp){return toast('Falta el precio de la competencia')}
+  if(!pRaw){return toast('Falta el precio de la competencia')}
+  const pNum=parseFloat(pRaw);
+  if(isNaN(pNum)||pNum<=0){return toast('Precio inválido. Usa punto, ej: 2.90')}
   const codes=currentCodes();
   const it={
     fecha:document.getElementById('fecha').value,responsable:document.getElementById('responsable').value,
@@ -176,7 +180,7 @@ function addItem(){
     marcaComp:prov,tipoComp:document.getElementById('tipoComp').value,
     especie:e,sub:document.getElementById('sub').value,presentacion:p,talla:document.getElementById('talla').value||'N/A',
     codigos:codes.map(x=>x.codigo).join(' | '),marcas:[...new Set(codes.map(x=>x.marca))].join(' | '),
-    pComp:pComp,unidad:document.getElementById('unidad').value,obs:document.getElementById('obs').value,
+    pComp:pNum,unidad:document.getElementById('unidad').value,obs:document.getElementById('obs').value,
     id:'H'+Date.now(),_sync:'pendiente'
   };
   items.push(it);save();render();sendPending();
@@ -198,6 +202,11 @@ function clearAll(){if(confirm('¿Vaciar todos los registros de este dispositivo
 function save(){localStorage.setItem('sm_horeca',JSON.stringify(items))}
 function buildRecord(it){return {ID:it.id||'',Fecha:it.fecha||'',Responsable:it.responsable||'',Zona:it.zona||'',Ciudad:it.ciudad||'',Cliente:'',TipoCliente:'',Especie:it.especie||'',SubEspecie:it.sub||'',Presentacion:it.presentacion||'',Talla:it.talla||'',CodigosSanMateo:it.codigos||'',MarcasComparables:it.marcas||'',ProveedorCompetencia:it.marcaComp||'',PrecioCompetencia:it.pComp||'',Unidad:it.unidad||'',TipoCompetencia:it.tipoComp||'',Observacion:it.obs||''};}
 async function sendPending(){
+  if(sending)return; // ya hay un envio en curso
+  sending=true;
+  try{ await _sendPending(); } finally { sending=false; }
+}
+async function _sendPending(){
   const el=document.getElementById('syncStatus');
   if(!SYNC_URL||SYNC_URL.indexOf('PEGA_AQUI')===0){if(el)el.textContent='⚠ Sin conectar a Google Sheets (modo local)';return;}
   const pend=items.filter(x=>x._sync!=='enviado');
